@@ -91,6 +91,8 @@ export default function MindsetQuestionnaire() {
     const [showError, setShowError] = useState(false);
     const [showQuestionnaire, setShowQuestionnaire] = useState(false);
     const questionRefs = useRef([]); // מערך של refs לשאלות
+    const resultRef = useRef(null); // ref חדש לאזור התוצאה
+
     const scrollToNextQuestion = (currentIndex) => {
             // אם זו לא השאלה האחרונה
             if (currentIndex < questions.length - 1) {
@@ -147,6 +149,15 @@ const calculateScore = () => {
 
     setScore(total);
     setShowError(false);
+
+       setTimeout(() => {
+            if (resultRef.current) {
+                resultRef.current.scrollIntoView({
+                    behavior: 'smooth',
+                    block: 'center'
+                });
+            }
+        }, 100);
 };
 
 const getResult = (score) => {
@@ -252,11 +263,14 @@ const getResult = (score) => {
                 </button>
 
                 {score !== null && (
-                    <div className="bg-gray-50 rounded-lg p-6 text-right">
-                        <p className="font-bold text-lg mb-2">ציון כולל: {score}</p>
-                        <p className="text-gray-700">{getResult(score)}</p>
-                    </div>
-                )}
+                <div 
+                    ref={resultRef} 
+                    className="mt-6 p-6 bg-gray-50 rounded-lg text-right transition-all duration-300"
+                >
+                    <p className="font-bold text-lg mb-2">ציון כולל: {score}</p>
+                    <p className="text-gray-700">{getResult(score)}</p>
+                </div>
+            )}
             </div>
         </div>
     );
