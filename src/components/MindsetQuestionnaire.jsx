@@ -170,8 +170,11 @@ const getResult = (score) => {
     }
 
     return (
-        <div className="bg-white rounded-lg shadow-lg p-8 max-w-2xl mx-auto my-8">
-            <h1 className="text-2xl font-bold text-right mb-8">שאלון דפוס חשיבה</h1>
+         <div className="bg-white rounded-lg shadow-lg p-8 max-w-2xl mx-auto my-8">
+            <h1 className="text-2xl font-bold text-right mb-2">שאלון דפוס חשיבה</h1>
+            <p className="text-right text-gray-600 mb-8">עבור כל אחד מן ההיגדים כתבו מהי עמדתכם האישית</p>
+        
+            <div className="space-y-8"></div>
             
             <div className="space-y-8">
                 {questions.map((question, index) => (
