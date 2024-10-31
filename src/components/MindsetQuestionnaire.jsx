@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react'; // נוסיף useRef
 
 const questions = [
   {
@@ -90,17 +90,33 @@ export default function MindsetQuestionnaire() {
     const [score, setScore] = useState(null);
     const [showError, setShowError] = useState(false);
     const [showQuestionnaire, setShowQuestionnaire] = useState(false);
-
-const handleAnswerChange = (questionIndex, value) => {
+    const questionRefs = useRef([]); // מערך של refs לשאלות
+    const scrollToNextQuestion = (currentIndex) => {
+            // אם זו לא השאלה האחרונה
+            if (currentIndex < questions.length - 1) {
+                const nextQuestion = questionRefs.current[currentIndex + 1];
+                if (nextQuestion) {
+                    nextQuestion.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'center'
+                    });
+                }
+            }
+        };
+        
+    const handleAnswerChange = (questionIndex, value) => {
     setAnswers(prev => ({
         ...prev,
         [questionIndex]: parseInt(value)
     }));
     setShowError(false);
+    setTimeout(() => {
+            scrollToNextQuestion(questionIndex);
+        }, 100);
 };
 
 const calculateQuestionScore = (questionType, answerValue) => {
-   if (questionType === 'positive') {
+    if (questionType === 'positive') {
         // עבור שאלה חיובית:
         // 0 (מסכים מאוד) = 3 נקודות
         // 1 (מסכים) = 2 נקודות
@@ -116,6 +132,7 @@ const calculateQuestionScore = (questionType, answerValue) => {
         return answerValue;
     }
 };
+
 
 const calculateScore = () => {
     if (Object.keys(answers).length !== questions.length) {
@@ -138,7 +155,7 @@ const getResult = (score) => {
     if (score <= 44) return "דפוס חשיבה מקובע: מתון";
     return "דפוס חשיבה מתפתח: חזק";
 };
-  
+
     const LandingPage = () => (
         <div className="bg-white rounded-lg shadow-lg p-8 max-w-2xl mx-auto my-8">
             <h1 className="text-2xl font-bold text-right mb-6">
@@ -184,7 +201,7 @@ const getResult = (score) => {
     }
 
     return (
-         <div className="bg-white rounded-lg shadow-lg p-8 max-w-2xl mx-auto my-8">
+        <div className="bg-white rounded-lg shadow-lg p-8 max-w-2xl mx-auto my-8">
             <h1 className="text-2xl font-bold text-right mb-2">שאלון דפוס חשיבה</h1>
             <p className="text-right text-gray-600 mb-8">עבור כל אחד מן ההיגדים כתבו מהי עמדתכם האישית</p>
         
@@ -192,7 +209,7 @@ const getResult = (score) => {
             
             <div className="space-y-8">
                 {questions.map((question, index) => (
-                    <div key={index} className="border-b border-gray-200 pb-6 last:border-0">
+                    <div key={index} className="border-b border-gray-200 pb-6 last:border-0 transition-all duration-300" ref={el => questionRefs.current[index] = el}>
                     <div className="flex flex-col space-y-2 text-right">
                         <div className="font-medium mb-4 text-lg">
                             {index + 1}. {question.text}
