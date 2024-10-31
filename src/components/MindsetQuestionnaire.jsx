@@ -90,7 +90,41 @@ export default function MindsetQuestionnaire() {
     const [score, setScore] = useState(null);
     const [showError, setShowError] = useState(false);
     const [showQuestionnaire, setShowQuestionnaire] = useState(false);
-    
+
+const handleAnswerChange = (questionIndex, value) => {
+    setAnswers(prev => ({
+        ...prev,
+        [questionIndex]: parseInt(value)
+    }));
+    setShowError(false);
+};
+
+const calculateQuestionScore = (questionType, answerValue) => {
+    return questionType === 'positive' ? 3 - answerValue : answerValue;
+};
+
+const calculateScore = () => {
+    if (Object.keys(answers).length !== questions.length) {
+        setShowError(true);
+        return;
+    }
+
+    const total = Object.entries(answers).reduce((sum, [index, value]) => {
+        const questionType = questions[parseInt(index)].type;
+        return sum + calculateQuestionScore(questionType, value);
+    }, 0);
+
+    setScore(total);
+    setShowError(false);
+};
+
+const getResult = (score) => {
+    if (score <= 20) return "דפוס חשיבה מקובע: חזק";
+    if (score <= 33) return "דפוס חשיבה מתפתח: מתון";
+    if (score <= 44) return "דפוס חשיבה מקובע: מתון";
+    return "דפוס חשיבה מתפתח: חזק";
+};
+  
     const LandingPage = () => (
         <div className="bg-white rounded-lg shadow-lg p-8 max-w-2xl mx-auto my-8">
             <h1 className="text-2xl font-bold text-right mb-6">
