@@ -92,17 +92,17 @@ export default function MindsetQuestionnaire() {
     const [showQuestionnaire, setShowQuestionnaire] = useState(false);
     
     const LandingPage = () => (
-        <div className="max-w-2xl mx-auto bg-white rounded-lg shadow-lg p-8">
+        <div className="bg-white rounded-lg shadow-lg p-8 max-w-2xl mx-auto my-8">
             <h1 className="text-2xl font-bold text-right mb-6">
                 שאלון דפוס חשיבה מתפתח לציר המנטלי
             </h1>
             
-            <div className="bg-blue-50 p-6 rounded-lg space-y-4 text-right">
-                <p className="font-bold">
+            <div className="bg-blue-50 p-6 rounded-lg mb-8">
+                <p className="font-bold mb-4 text-right">
                     ברוכים הבאים לשאלון 'דפוס חשיבה מתפתח' שיתן לכם הצצה למוקד של הציר המנטלי בתוכנית ההייטק
                 </p>
                 
-                <div className="space-y-4">
+                <div className="space-y-4 text-right">
                     <p>
                         <strong>מטרת הציר המנטלי</strong> - לתת כלים לתלמידים לפתח תחושת מסוגלות וחוסן, 
                         וליצר תמונת עתיד מלאת אפשרויות והזדמנויות.
@@ -115,14 +115,14 @@ export default function MindsetQuestionnaire() {
                 </div>
             </div>
 
-            <div className="text-right mt-8">
+            <div className="text-right">
                 <p className="font-bold text-xl mb-4">רוצים להכיר את דפוס המחשבה שלכם?</p>
                 <p className="mb-8">
                     ענו על השאלון שיעזור לכם להבין טוב יותר כיצד אתם מתייחסים ללמידה, כישלונות והצלחה.
                 </p>
                 
                 <button 
-                    className="w-full bg-green-600 text-white px-6 py-3 rounded-lg text-lg font-bold hover:bg-green-700"
+                    className="w-full bg-emerald-600 hover:bg-emerald-700 text-white px-6 py-3 rounded-lg text-lg font-bold transition-colors"
                     onClick={() => setShowQuestionnaire(true)}
                 >
                     התחל שאלון
@@ -131,75 +131,37 @@ export default function MindsetQuestionnaire() {
         </div>
     );
 
-    const handleAnswerChange = (questionIndex, value) => {
-        setAnswers(prev => ({
-            ...prev,
-            [questionIndex]: parseInt(value)
-        }));
-        setShowError(false);
-    };
-
-    const calculateQuestionScore = (questionType, answerValue) => {
-        return questionType === 'positive' ? 3 - answerValue : answerValue;
-    };
-
-    const calculateScore = () => {
-        if (Object.keys(answers).length !== questions.length) {
-            setShowError(true);
-            return;
-        }
-
-        const total = Object.entries(answers).reduce((sum, [index, value]) => {
-            const questionType = questions[parseInt(index)].type;
-            return sum + calculateQuestionScore(questionType, value);
-        }, 0);
-
-        setScore(total);
-        setShowError(false);
-    };
-
-    const getResult = (score) => {
-        if (score <= 20) return "דפוס חשיבה מקובע: חזק";
-        if (score <= 33) return "דפוס חשיבה מתפתח: מתון";
-        if (score <= 44) return "דפוס חשיבה מקובע: מתון";
-        return "דפוס חשיבה מתפתח: חזק";
-    };
-
-    const getUnansweredQuestions = () => {
-        return questions.length - Object.keys(answers).length;
-    };
-
     if (!showQuestionnaire) {
         return <LandingPage />;
     }
 
     return (
-        <div className="max-w-2xl mx-auto bg-white rounded-lg shadow-lg p-8">
-            <h1 className="text-xl font-bold text-right mb-6">שאלון דפוס חשיבה</h1>
+        <div className="bg-white rounded-lg shadow-lg p-8 max-w-2xl mx-auto my-8">
+            <h1 className="text-2xl font-bold text-right mb-8">שאלון דפוס חשיבה</h1>
             
-            <div className="space-y-6">
+            <div className="space-y-8">
                 {questions.map((question, index) => (
-                    <div key={index} className="space-y-2 text-right border-b pb-4">
-                        <div className="font-medium">
+                    <div key={index} className="border-b border-gray-200 pb-6 last:border-0">
+                        <div className="text-right font-medium mb-4">
                             {index + 1}. {question.text}
                         </div>
-                        <div className="flex justify-end space-x-8">
+                        <div className="flex flex-row-reverse gap-8">
                             {[
                                 { value: "0", label: "מסכים מאוד" },
                                 { value: "1", label: "מסכים" },
                                 { value: "2", label: "לא מסכים" },
                                 { value: "3", label: "מאוד לא מסכים" }
                             ].map((option) => (
-                                <label key={option.value} className="flex items-center">
+                                <label key={option.value} className="flex items-center gap-2">
                                     <input
                                         type="radio"
                                         name={`question-${index}`}
                                         value={option.value}
                                         checked={answers[index]?.toString() === option.value}
                                         onChange={(e) => handleAnswerChange(index, e.target.value)}
-                                        className="ml-2"
+                                        className="form-radio h-4 w-4 text-blue-600"
                                     />
-                                    {option.label}
+                                    <span>{option.label}</span>
                                 </label>
                             ))}
                         </div>
@@ -208,21 +170,21 @@ export default function MindsetQuestionnaire() {
 
                 {showError && (
                     <div className="text-right text-red-500 font-medium">
-                        נא לענות על כל השאלות (נותרו {getUnansweredQuestions()} שאלות)
+                        נא לענות על כל השאלות (נותרו {questions.length - Object.keys(answers).length} שאלות)
                     </div>
                 )}
 
                 <button 
-                    className="w-full bg-blue-600 text-white px-6 py-3 rounded-lg hover:bg-blue-700"
+                    className="w-full bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-lg font-medium transition-colors"
                     onClick={calculateScore}
                 >
                     חשב תוצאה
                 </button>
 
                 {score !== null && (
-                    <div className="mt-6 p-4 bg-gray-100 rounded-lg text-right">
-                        <p className="font-bold">ציון כולל: {score}</p>
-                        <p className="mt-2">{getResult(score)}</p>
+                    <div className="bg-gray-50 rounded-lg p-6 text-right">
+                        <p className="font-bold text-lg mb-2">ציון כולל: {score}</p>
+                        <p className="text-gray-700">{getResult(score)}</p>
                     </div>
                 )}
             </div>
