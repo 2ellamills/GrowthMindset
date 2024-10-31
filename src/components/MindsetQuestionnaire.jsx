@@ -194,26 +194,26 @@ const getResult = (score) => {
                 {questions.map((question, index) => (
                     <div key={index} className="border-b border-gray-200 pb-6 last:border-0">
                     <div className="flex flex-col space-y-2 text-right">
-                        <div className="font-medium mb-2">
+                        <div className="font-medium mb-4 text-lg">
                             {index + 1}. {question.text}
                         </div>
-                        <div className="flex flex-col sm:flex-row sm:justify-end sm:gap-8 space-y-2 sm:space-y-0">
+                        <div className="flex flex-col sm:flex-row sm:justify-end sm:gap-8 space-y-3 sm:space-y-0">
                             {[
                                 { value: "0", label: "מסכים מאוד" },
                                 { value: "1", label: "מסכים" },
                                 { value: "2", label: "לא מסכים" },
                                 { value: "3", label: "מאוד לא מסכים" }
                             ].map((option) => (
-                                <label key={option.value} className="flex items-center justify-end">
+                                <label key={option.value} className="flex items-center text-base w-full">
                                     <input
                                         type="radio"
                                         name={`question-${index}`}
                                         value={option.value}
                                         checked={answers[index]?.toString() === option.value}
                                         onChange={(e) => handleAnswerChange(index, e.target.value)}
-                                        className="form-radio h-4 w-4 text-blue-600 ml-2"
+                                        className="form-radio h-5 w-5 text-blue-600 ml-2"
                                     />
-                                    <span className="text-sm sm:text-base">{option.label}</span>
+                                    <span>{option.label}</span>
                                 </label>
                             ))}
                         </div>
