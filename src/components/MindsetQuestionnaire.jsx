@@ -100,7 +100,21 @@ const handleAnswerChange = (questionIndex, value) => {
 };
 
 const calculateQuestionScore = (questionType, answerValue) => {
-    return questionType === 'positive' ? 3 - answerValue : answerValue;
+   if (questionType === 'positive') {
+        // עבור שאלה חיובית:
+        // 0 (מסכים מאוד) = 3 נקודות
+        // 1 (מסכים) = 2 נקודות
+        // 2 (לא מסכים) = 1 נקודה
+        // 3 (מאוד לא מסכים) = 0 נקודות
+        return 3 - answerValue;
+    } else {
+        // עבור שאלה שלילית:
+        // 0 (מסכים מאוד) = 0 נקודות
+        // 1 (מסכים) = 1 נקודה
+        // 2 (לא מסכים) = 2 נקודות
+        // 3 (מאוד לא מסכים) = 3 נקודות
+        return answerValue;
+    }
 };
 
 const calculateScore = () => {
@@ -182,13 +196,14 @@ const getResult = (score) => {
                         <div className="text-right font-medium mb-4">
                             {index + 1}. {question.text}
                         </div>
-                        <div className="flex flex-row-reverse gap-8">
+                        {/* בחלק שמציג את השאלות */}
+                        <div className="flex justify-end gap-8 flex-row">
                             {[
                                 { value: "0", label: "מסכים מאוד" },
                                 { value: "1", label: "מסכים" },
                                 { value: "2", label: "לא מסכים" },
                                 { value: "3", label: "מאוד לא מסכים" }
-                            ].map((option) => (
+                            ].reverse().map((option) => (
                                 <label key={option.value} className="flex items-center gap-2">
                                     <input
                                         type="radio"
