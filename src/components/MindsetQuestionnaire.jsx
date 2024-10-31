@@ -203,7 +203,7 @@ const getResult = (score) => {
                                 { value: "1", label: "מסכים" },
                                 { value: "2", label: "לא מסכים" },
                                 { value: "3", label: "מאוד לא מסכים" }
-                            ].reverse().map((option) => (
+                            ].map((option) => (
                                 <label key={option.value} className="flex items-center gap-2">
                                     <input
                                         type="radio"
