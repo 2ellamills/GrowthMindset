@@ -190,34 +190,33 @@ const getResult = (score) => {
         
             <div className="space-y-8"></div>
             
-            <div className="space-y-8">
+           <div className="space-y-8">
                 {questions.map((question, index) => (
-                    <div key={index} className="border-b border-gray-200 pb-6 last:border-0">
-                        <div className="text-right font-medium mb-4">
-                            {index + 1}. {question.text}
-                        </div>
-                        {/* בחלק שמציג את השאלות */}
-                        <div className="flex justify-end gap-8 flex-row">
-                            {[
-                                { value: "0", label: "מסכים מאוד" },
-                                { value: "1", label: "מסכים" },
-                                { value: "2", label: "לא מסכים" },
-                                { value: "3", label: "מאוד לא מסכים" }
-                            ].map((option) => (
-                                <label key={option.value} className="flex items-center gap-2">
-                                    <input
-                                        type="radio"
-                                        name={`question-${index}`}
-                                        value={option.value}
-                                        checked={answers[index]?.toString() === option.value}
-                                        onChange={(e) => handleAnswerChange(index, e.target.value)}
-                                        className="form-radio h-4 w-4 text-blue-600"
-                                    />
-                                    <span>{option.label}</span>
-                                </label>
-                            ))}
-                        </div>
+                    <div className="flex flex-col space-y-2 text-right">
+                    <div className="font-medium mb-2">
+                        {index + 1}. {question.text}
                     </div>
+                    <div className="flex flex-row justify-end gap-2 sm:gap-8 px-2">
+                        {[
+                            { value: "0", label: "מסכים מאוד" },
+                            { value: "1", label: "מסכים" },
+                            { value: "2", label: "לא מסכים" },
+                            { value: "3", label: "מאוד לא מסכים" }
+                        ].map((option) => (
+                            <label key={option.value} className="flex items-center whitespace-nowrap">
+                                <input
+                                    type="radio"
+                                    name={`question-${index}`}
+                                    value={option.value}
+                                    checked={answers[index]?.toString() === option.value}
+                                    onChange={(e) => handleAnswerChange(index, e.target.value)}
+                                    className="form-radio h-4 w-4 text-blue-600 ml-1 mr-1"
+                                />
+                                <span className="text-sm sm:text-base">{option.label}</span>
+                            </label>
+                        ))}
+                    </div>
+                </div>
                 ))}
 
                 {showError && (
